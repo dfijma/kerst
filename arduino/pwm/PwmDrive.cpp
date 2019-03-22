@@ -16,12 +16,6 @@ void PwmDrive::setup() {
   setOutput();
 }
 
-  /*
-  Serial.print(speed0); Serial.print(direction0); Serial.println();
-  Serial.print(speed1); Serial.print(direction1); Serial.println();
-  Serial.print(brake); Serial.println();
-  */
-  
 void PwmDrive::set(int channel, int speed, boolean direction) {
   if (channel == 0) {
     speed0 = speed;

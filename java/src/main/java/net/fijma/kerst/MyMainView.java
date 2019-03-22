@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 public class MyMainView extends View<MyModel> {
 
-    Logger log = Logger.getGlobal();
+    public static final Logger LOGGER = Logger.getLogger(MyMainView.class.getName());
 
     final Event<Void> up = new Event<>();
     final Event<Void> down = new Event<>();
@@ -51,6 +51,14 @@ public class MyMainView extends View<MyModel> {
             case 78: // N
             case 110:
                 down.trigger(null);
+                break;
+            case 79: // P
+            case 111:
+                model.setPower(false);
+                break;
+            case 80: // P
+            case 112:
+                model.setPower(true);
                 break;
             default:
                 ; // ?

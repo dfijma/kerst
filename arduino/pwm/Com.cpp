@@ -79,6 +79,9 @@ static void parse(PwmDrive& pwmDrive, byte *cmd) {
     }
     
     pwmDrive.set(channel, speed, direction==1);
+    Serial.print("OK "); Serial.print(channel); Serial.print(" ");
+    Serial.print(speed); Serial.print(" ");
+    Serial.print(direction); Serial.println();
     break;
   }
 
@@ -87,6 +90,7 @@ static void parse(PwmDrive& pwmDrive, byte *cmd) {
     pwmDrive.powerOn();
     break;
   }
+  
   case 'O': case 'o': {
     Serial.println("OK power is off");
     pwmDrive.powerOff();

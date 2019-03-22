@@ -5,7 +5,11 @@ import net.fijma.mvc.Controller;
 import net.fijma.mvc.Msg;
 import net.fijma.mvc.serial.Serial;
 
+import java.util.logging.Logger;
+
 public class MyController extends Controller<App, MyModel, MyMainView> {
+
+    public static final Logger LOGGER = Logger.getLogger(MyMainView.class.getName());
 
     MyController(App app, MyModel model, MyMainView view) {
         super(app, model, view);
@@ -29,6 +33,7 @@ public class MyController extends Controller<App, MyModel, MyMainView> {
         if (msg instanceof Application.KeyMsg) {
             return mainView.key(((Application.KeyMsg)msg).key);
         } else if (msg instanceof Serial.SerialMsg) {
+            LOGGER.info("serial: " +((Serial.SerialMsg)msg).line);
             return true; // ignore
         }
         return true; // catch-all, ignore and continue
