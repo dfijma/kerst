@@ -10,7 +10,7 @@ PwmDrive pwmDrive;
 
 void setup() {
   pwmDrive.setup();
-  com.setup();
+  com.setup(pwmDrive);
 }
 
 void loop() {

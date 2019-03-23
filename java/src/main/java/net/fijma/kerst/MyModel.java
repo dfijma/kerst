@@ -45,7 +45,7 @@ public class MyModel {
     private void sendSpeed(int channel) {
         try {
             int v = speed[channel];
-            serial.write(String.format("s 0 %d %d\n", Math.abs(v), v < 0 ? 0 : 1));
+            serial.write(String.format("s %d %d %d\n", channel, Math.abs(v), v < 0 ? 0 : 1));
         } catch (IOException e) {
             // TODO
         }

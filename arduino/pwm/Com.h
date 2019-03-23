@@ -52,7 +52,7 @@
 class Com {
   public:
     Com() {};
-    void setup();
+    void setup(PwmDrive& pwmDrive);
     void executeOn(PwmDrive& pwmDrive);
     void sendLoconet(lnMsg* packet);
     void sendPowerState();

@@ -9,6 +9,7 @@ class PwmDrive {
     void set(int channel, int speed, boolean direction);
     void powerOn() { brake = false; setOutput(); }
     void powerOff() { brake = true; setOutput(); }
+    void sendState();
 
   private:
      int speed0;

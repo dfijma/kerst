@@ -79,21 +79,19 @@ static void parse(PwmDrive& pwmDrive, byte *cmd) {
     }
     
     pwmDrive.set(channel, speed, direction==1);
-    Serial.print("OK "); Serial.print(channel); Serial.print(" ");
-    Serial.print(speed); Serial.print(" ");
-    Serial.print(direction); Serial.println();
+    pwmDrive.sendState();
     break;
   }
 
   case 'P': case 'p': {
-    Serial.println("OK power is on");
     pwmDrive.powerOn();
+    pwmDrive.sendState();
     break;
   }
   
   case 'O': case 'o': {
-    Serial.println("OK power is off");
     pwmDrive.powerOff();
+    pwmDrive.sendState();
     break;
   }
  
@@ -102,9 +100,9 @@ static void parse(PwmDrive& pwmDrive, byte *cmd) {
   }
 }
 
-void Com::setup() {
+void Com::setup(PwmDrive& pwmDrive) {
   Serial.begin(57600);
-  Serial.println("HELO");
+  pwmDrive.sendState();
 }
 
 void Com::executeOn(PwmDrive& pwmDrive) {

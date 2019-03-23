@@ -28,7 +28,6 @@ void PwmDrive::set(int channel, int speed, boolean direction) {
 }
 
 void PwmDrive::setOutput() {
-
   digitalWrite(BRAKE_A, brake);
   digitalWrite(BRAKE_B, brake);
 
@@ -37,5 +36,11 @@ void PwmDrive::setOutput() {
   
   analogWrite(SPEED_A, speed0);
   analogWrite(SPEED_B, speed1);
+}
+
+void PwmDrive::sendState() {
+  Serial.print("OK "); Serial.print(speed0); Serial.print(" "); Serial.print(direction0); Serial.print(" ");
+  Serial.print(speed1); Serial.print(" "); Serial.print(direction1); Serial.print(" ");
+  Serial.print(brake); Serial.println();
 }
 

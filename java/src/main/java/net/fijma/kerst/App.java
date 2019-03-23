@@ -53,19 +53,15 @@ public class App extends Application {
 
     private void exec(String device) throws Exception {
 
-
         // register optional module(s)
         Serial s = new Serial(this,device);
-        s.start();
         registerModule(s);
 
-        App app = new App();
         MyModel model = new MyModel(getModule(Serial.class));
         MyMainView view = new MyMainView(model);
-        MyController controller = new MyController(app, model, view);
+        MyController controller = new MyController(this, model, view);
 
-        app.run(controller);
-        s.stop();
+        run(controller);
     }
 
 }
