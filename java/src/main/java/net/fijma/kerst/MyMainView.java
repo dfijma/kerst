@@ -14,16 +14,26 @@ public class MyMainView extends View<MyModel> {
 
     public static final Logger LOGGER = Logger.getLogger(MyMainView.class.getName());
 
-    final Event<Void> up = new Event<>();
-    final Event<Void> down = new Event<>();
+    final Event<Integer> up = new Event<>();
+    final Event<Integer> down = new Event<>();
 
     MyMainView(MyModel model) {
         super(model);
     }
 
-    void somethingChanged(int i) {
-        setRC(10,10);
-        System.out.print((i < 0 ? red() : green()) + String.format("%10s", i));
+    void onSpeedChanged(int channel) {
+        setRC(2+channel,4);
+        int v = model.getSpeed(channel);
+        System.out.print((v < 0 ? red() : green()) + String.format("%3s", Math.abs(v)));
+    }
+
+    void onPowerChanged(Boolean power) {
+        setRC(2, 42);
+        if (power) {
+            System.out.print(green() + " ON" + reset());
+        } else {
+            System.out.print(red() + "OFF" +  reset());
+        }
     }
 
     @Override
@@ -36,21 +46,32 @@ public class MyMainView extends View<MyModel> {
                 System.out.print(lines.get(i).replace("\n", ""));
             }
         } catch (IOException e) { throw new RuntimeException(e); }
+        onSpeedChanged(0);
+        onSpeedChanged(1);
+        onPowerChanged(model.getPower());
     }
 
     @Override
     public boolean key(int k) {
         switch (k) {
-            case 88: // X, quit
-            case 120:
+            case 81: // Q, quit
+            case 113:
                 return false;
             case 77: // M
             case 109:
-                up.trigger(null);
+                up.trigger(1);
                 break;
             case 78: // N
             case 110:
-                down.trigger(null);
+                down.trigger(1);
+                break;
+            case 90: // Z
+            case 122:
+                down.trigger(0);
+                break;
+            case 88: // X
+            case 120:
+                up.trigger(0);
                 break;
             case 79: // P
             case 111:

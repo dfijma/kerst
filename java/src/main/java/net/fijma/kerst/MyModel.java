@@ -11,37 +11,41 @@ public class MyModel {
     private static final Logger LOGGER = Logger.getLogger(MyModel.class.getName());
     private final Serial serial;
 
-    final Event<Integer> onSomethingChanged = new Event<>();
+    final Event<Integer> speedChanged = new Event<>();
+    final Event<Boolean> powerChanged = new Event<>();
 
     // the actual model
-    private int value;
+    private int[] speed;
     private boolean power;
 
     public MyModel(Serial serial) {
         this.serial = serial;
-        value = 0;
+        speed = new int[] {0, 0}; // two channels
         power = false;
     }
 
-    public void inc() {
-        value++;
-        if (value > 255) value = 255;
-        LOGGER.info(() -> String.format("inc: value is now: %d", value));
-        onSomethingChanged.trigger(value);
-        try {
-            serial.write(String.format("s 0 %d 1\n", value));
-        } catch (IOException e) {
-            // TODO
-        }
+    public void inc(int channel) {
+        speed[channel] = Math.min(speed[channel]+1, 255);
+        speedChanged.trigger(channel);
+        logState();
+        sendSpeed(channel);
     }
 
-    public void dec() {
-        value--;
-        if (value <0) value = 0;
-        LOGGER.info(() -> String.format("dec: value is now: %d", value));
-        onSomethingChanged.trigger(value);
+    public void dec(int channel) {
+        speed[channel] = Math.max(speed[channel]-1, -255);
+        speedChanged.trigger(channel);
+        logState();
+        sendSpeed(channel);
+    }
+
+    public int getSpeed(int channel) {
+        return speed[channel];
+    }
+
+    private void sendSpeed(int channel) {
         try {
-            serial.write(String.format("s 0 %d 1\n", value));
+            int v = speed[channel];
+            serial.write(String.format("s 0 %d %d\n", Math.abs(v), v < 0 ? 0 : 1));
         } catch (IOException e) {
             // TODO
         }
@@ -49,6 +53,8 @@ public class MyModel {
 
     public void setPower(boolean power) {
         this.power = power;
+        powerChanged.trigger(power);
+        logState();
         try {
             if (power) {
                 serial.write("p\n");
@@ -58,5 +64,13 @@ public class MyModel {
         } catch (IOException e) {
             // TODO
         }
+    }
+
+    public boolean getPower() {
+        return power;
+    }
+
+    private void logState() {
+        LOGGER.info(() -> "A=" + speed[0] + " B=" + speed[1] + " POWER=" + (power ? "ON" : "OFF"));
     }
 }

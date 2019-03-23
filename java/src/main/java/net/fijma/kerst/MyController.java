@@ -14,18 +14,19 @@ public class MyController extends Controller<App, MyModel, MyMainView> {
     MyController(App app, MyModel model, MyMainView view) {
         super(app, model, view);
         // wire model -> views
-        model.onSomethingChanged.attach(view::somethingChanged);
+        model.speedChanged.attach(view::onSpeedChanged);
+        model.powerChanged.attach(view::onPowerChanged);
         // wire views -> controller
         view.down.attach(this::onDownEvent);
         view.up.attach(this::onUpEvent);
     }
 
-    private void onUpEvent(Void v) {
-        model.inc();
+    private void onUpEvent(int channel) {
+        model.inc(channel);
     }
 
-    private void onDownEvent(Void v) {
-        model.dec();
+    private void onDownEvent(int channel) {
+        model.dec(channel);
     }
 
     @Override
