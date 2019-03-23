@@ -13,6 +13,7 @@ public class MyModel {
 
     final Event<Integer> speedChanged = new Event<>();
     final Event<Boolean> powerChanged = new Event<>();
+    final Event<String> serialStateChanged = new Event<>();
 
     // the actual model
     private int[] speed;
@@ -68,6 +69,12 @@ public class MyModel {
 
     public boolean getPower() {
         return power;
+    }
+
+    public void onSerialMsg(Serial.SerialMsg msg) {
+        final String line = msg.line;
+        LOGGER.info(() -> "serial message: " + line);
+        serialStateChanged.trigger(line);
     }
 
     private void logState() {

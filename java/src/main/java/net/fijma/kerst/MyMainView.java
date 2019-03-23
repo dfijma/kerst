@@ -24,7 +24,7 @@ public class MyMainView extends View<MyModel> {
     void onSpeedChanged(int channel) {
         setRC(2+channel,4);
         int v = model.getSpeed(channel);
-        System.out.print((v < 0 ? red() : green()) + String.format("%3s", Math.abs(v)));
+        System.out.print((v < 0 ? red() : green()) + String.format("%3s", Math.abs(v)) + reset());
     }
 
     void onPowerChanged(Boolean power) {
@@ -34,6 +34,11 @@ public class MyMainView extends View<MyModel> {
         } else {
             System.out.print(red() + "OFF" +  reset());
         }
+    }
+
+    void onSerialStateChanged(String line) {
+        setRC(10, 2);
+        System.out.print(String.format("%78s", line));
     }
 
     @Override

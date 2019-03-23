@@ -16,6 +16,7 @@ public class MyController extends Controller<App, MyModel, MyMainView> {
         // wire model -> views
         model.speedChanged.attach(view::onSpeedChanged);
         model.powerChanged.attach(view::onPowerChanged);
+        model.serialStateChanged.attach(view::onSerialStateChanged);
         // wire views -> controller
         view.down.attach(this::onDownEvent);
         view.up.attach(this::onUpEvent);
@@ -34,8 +35,7 @@ public class MyController extends Controller<App, MyModel, MyMainView> {
         if (msg instanceof Application.KeyMsg) {
             return mainView.key(((Application.KeyMsg)msg).key);
         } else if (msg instanceof Serial.SerialMsg) {
-            LOGGER.info("serial: " +((Serial.SerialMsg)msg).line);
-            return true; // ignore
+            model.onSerialMsg((Serial.SerialMsg)msg);
         }
         return true; // catch-all, ignore and continue
     }
